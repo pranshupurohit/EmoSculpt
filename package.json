@@ -1,0 +1,23 @@
+{
+  "name": "emosculpt-chatbot",
+  "version": "1.0.0",
+  "description": "EmoSculpt: The Emotional Gym chatbot",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "emotional intelligence",
+    "chatbot",
+    "well-being",
+    "neuroscience"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
