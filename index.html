@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EmoSculpt: The Emotional Gym</title>
+<style>
+body {
+  background-color: #1F1F1F; /* Dark background */
+  color: #FFFFFF; /* White text */
+  font-family: 'Roboto Mono', monospace; /* Code-like font */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#chat-container {
+  background-color: #2B2B2B;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.1); /* White shadow */
+  width: 600px; /* Wider container */
+  letter-spacing: 1px; /* Increased letter spacing */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 500; /* Less bold heading */
+}
+
+/* Logo Styles */
+.logo {
+  display: block; 
+  max-width: 150px; /* Adjust as needed */
+  margin: 0 auto 10px; /* Centered with margin */
+}
+
+.chat-logo {
+  display: inline-block;
+  max-width: 30px; /* Adjust as needed */
+  vertical-align: middle; 
+  margin-right: 10px;
+}
+
+#chat-history {
+  height: 400px; /* Taller history area */
+  overflow-y: scroll;
+  padding: 10px; /* Padding for better readability */
+  border: 1px solid #404040; /* Subtle border */
+  border-radius: 5px;
+}
+
+.user-message, 
+.bot-message {
+  padding: 15px; /* Increased padding */
+  margin-bottom: 10px;
+  border-radius: 8px;
+  line-height: 1.6; /* Improved line height */
+}
+
+.user-message {
+  text-align: right;
+  background-color: #424242; 
+}
+
+.bot-message {
+  text-align: left;
+  background-color: #333333;
+}
+
+form {
+  display: flex;
+  margin-top: 10px;
+}
+
+input {
+  flex-grow: 1;
+  margin-right: 10px;
+  padding: 10px;
+  border: 1px solid #505050; /* Darker border */
+  border-radius: 5px;
+  background-color: #333333; /* Darker input background */
+  color: #FFFFFF; /* White text */
+}
+
+button {
+  background-color: #673AB7; /* Google-like purple button */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+#loader {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+</head>
+<body>
+  <div id="chat-container">
+    <img src="EmoSculpt.jpg" alt="EmoSculpt Logo" class="logo"> <div id="chat-history"></div>
+  <form id="chat-form">
+    <input type="text" id="user-input" placeholder="Enter your message">
+    <button type="submit">Send</button>
+  </form>
+</div>
+<div id="loader">
+  <img src="loader.gif" width="150px" alt="Loading...">
+</div>
+  <script>
+    const chatHistory = document.getElementById('chat-history');
+    const userInput = document.getElementById('user-input');
+    const form = document.getElementById('chat-form');
+
+    async function sendMessage() {
+      const userMessage = userInput.value;
+      userInput.value = ''; // Clear input field
+      console.log(userMessage)
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userInput: userMessage }),
+        });
+
+        const data = await response.json();
+        console.log(data)
+        const botMessage = data.response;
+        console.log(botMessage)
+        // Add chat message to the chat history
+        chatHistory.innerHTML += `<div class="user-message">${userMessage}</div>`; 
+        chatHistory.innerHTML += `<div class="bot-message"><img src="EmoSculpt.jpg" alt="EmoSculpt Logo" class="chat-logo">${botMessage}</div>`; // Logo before message
+
+        // Scroll to the bottom of the chat history
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle errors gracefully, e.g., display an error message to the user
+      }
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent form submission
+      const loader = document.getElementById('loader');
+      loader.style.display = 'block'; // Show the loader
+      sendMessage().finally(() => {
+      loader.style.display = 'none'; // Hide the loader after the message is sent
+    });;
+    });
+  </script>
+</body>
+</html>
