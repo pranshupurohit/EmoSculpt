@@ -20,9 +20,9 @@ async function runChat(userInput) {
   });
 
   const generationConfig = {
-    temperature: 0.9,
-    topK: 1,
-    topP: 1,
+    temperature: 0,
+    topK: 64,
+    topP: 0.95,
     maxOutputTokens: 1000,
   };
 
@@ -91,6 +91,8 @@ app.post('/chat', async (req, res) => {
     console.error('Error in chat endpoint:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+  chat.history.push({ role: 'user', parts: [{ text: userInput }] });
+  chat.history.push({ role: 'model', parts: [{ text: response.text() }] });
 });
 
 app.listen(port, () => {
