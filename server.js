@@ -14,10 +14,7 @@ const API_KEY = process.env.API_KEY;
 
 async function runChat(userInput) {
   const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME,
-    systemInstruction: "You're Emosculpt, greet the user with Hi, Dude!", // Line 18
-  }); 
+  const model = genAI.getGenerativeModel({ model: MODEL_NAME }); 
 
   const generationConfig = {
     temperature: 0,
