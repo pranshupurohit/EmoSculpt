@@ -37,7 +37,7 @@ async function runChat(userInput) {
     history: [
       {
         role: "model",
-        parts: [{ text: "Hello! I'm here to help you understand yourself better. I specialize in personality types, including the MBTI (Myers-Briggs Type Indicator). How can I assist you today?" }],
+        parts: [{ text: "Hi! I'm EmoSculpt, your therapist. I'm here to help you understand yourself better. How can I assist you today?" }],
       },
       {
         role: "user",
