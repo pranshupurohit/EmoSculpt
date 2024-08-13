@@ -1,6 +1,6 @@
-# EmoSculpt: The Emotional Gym Chatbot
+# EmoSculpt: Your AI-powered emotional gym with personalized workouts
 
-This repository contains the code for EmoSculpt, an AI-powered chatbot designed to help you strengthen your emotional style and enhance your overall well-being. EmoSculpt is inspired by the research of neuroscientist Richard Davidson and his book "The Emotional Life of Your Brain."
+This repository contains the code for EmoSculpt, an AI-powered chatbot designed to help you strengthen your emotional style and enhance your overall well-being. EmoSculpt is inspired by neuroscientist Richard Davidson's research and book, "The Emotional Life of Your Brain."
 
 ## Features
 
