@@ -147,7 +147,7 @@ button {
 </head>
 <body>
   <div id="chat-container">
-    <img src="EmoSculpt.jpg" alt="EmoSculpt Logo" class="logo">
+    <img src="https://github.com/pranshupurohit/EmoSculpt/blob/main/EmoSculpt.jpg" alt="EmoSculpt Logo" class="logo">
     <div id="chat-history"></div>
     <form id="chat-form">
       <input type="text" id="user-input" placeholder="Enter your message">
@@ -177,7 +177,7 @@ button {
         const data = await response.json();
         const botMessage = data.response;
         chatHistory.innerHTML += `<div class="user-message">${userMessage}</div>`; 
-        chatHistory.innerHTML += `<div class="bot-message"><img src="EmoSculpt.jpg" alt="EmoSculpt Logo" class="chat-logo">${botMessage}</div>`; // Logo before message
+        chatHistory.innerHTML += `<div class="bot-message"><img src="https://github.com/pranshupurohit/EmoSculpt/blob/main/EmoSculpt.jpg" alt="EmoSculpt Logo" class="chat-logo">${botMessage}</div>`; // Logo before message
 
         // Scroll to the bottom of the chat history
         chatHistory.scrollTop = chatHistory.scrollHeight;
