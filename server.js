@@ -4,6 +4,8 @@ const dotenv = require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Middleware to parse JSON request bodies
 app.use(express.json());
 
 const MODEL_NAME = "gemini-1.5-pro-001"; 
@@ -64,8 +66,9 @@ app.get('/loader.gif', (req, res) => {
 });
 
 app.post('/chat', async (req, res) => {
+  console.log('Request Body:', req.body); // Log the entire body for debugging
   try {
-    const userInput = req.body?.userInput;
+    const userInput = req.body?.userInput; // Access userInput directly
     console.log('Incoming /chat req:', userInput);
 
     if (!userInput) {
