@@ -1,5 +1,5 @@
-// node --version # Should be >= 18
-// npm install @google/generative-ai express dotenv
+// Ensure Node.js version is >= 18
+// Install dependencies: npm install @google/generative-ai express dotenv
 
 const express = require('express');
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
@@ -9,19 +9,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
-const MODEL_NAME = "gemini-1.5-pro"; 
-const API_KEY = process.env.API_KEY; 
+const MODEL_NAME = "gemini-1.5-pro"; // Using Gemini 1.5 Pro
+const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
 
 async function runChat(userInput) {
   const genAI = new GoogleGenerativeAI(API_KEY);
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
   const generationConfig = {
-    temperature: 0, // You can adjust these parameters
-    topP: 0.95,
-    topK: 64,
-    maxOutputTokens: 8192,
-    responseMimeType: "text/plain",
+    temperature: 0.9,
+    topK: 1,
+    topP: 1,
+    maxOutputTokens: 1000,
   };
 
   const safetySettings = [
@@ -32,30 +31,68 @@ async function runChat(userInput) {
     // Additional safety settings can be added here
   ];
 
-  const chatSession = model.startChat({
+  const chat = model.startChat({
     generationConfig,
     safetySettings,
     history: [
       {
-        role: "user",
-        parts: [
-          { text: "Tell User about emotional styles when he replies to your hi" },
-          { text: "Tell user about emotional dimensions after asking if he's more interested to know" },
-        ],
+        role: "model",
+        parts: [{ text: "Hello! I'm here to help you understand yourself better. I specialize in personality types, including the MBTI (Myers-Briggs Type Indicator). How can I assist you today?" }],
       },
-      // You can add more initial history here to set up the conversation
+      {
+        role: "user",
+        parts: [{ text: "Can you tell me about MBTI?" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "The MBTI is a personality assessment tool that categorizes individuals into 16 different personality types based on their preferences in four dichotomies: Extraversion vs. Introversion, Sensing vs. Intuition, Thinking vs. Feeling, and Judging vs. Perceiving. Each type has unique characteristics and can help you understand your behavior and interactions with others." }],
+      },
+      {
+        role: "user",
+        parts: [{ text: "What about ENTP?" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "The ENTP personality type, also known as the 'Debater,' is characterized by their enthusiasm for exploring new ideas and engaging in intellectual discussions. ENTPs are known for their creativity, adaptability, and ability to think outside the box. They thrive on debate and often challenge the status quo, making them excellent problem solvers. If you're an ENTP, you likely enjoy brainstorming and coming up with innovative solutions." }],
+      },
     ],
   });
 
-  const result = await chatSession.sendMessage(userInput); 
+  const result = await chat.sendMessage(userInput);
   const response = result.response;
 
-  // Error handling (similar to the working example)
   if (response && response.text) {
-    return response.text(); 
+    return response.text(); // Ensure this returns the correct text
   } else {
     throw new Error('Invalid response structure from AI model');
   }
 }
 
-// ... (rest of the server.js code - routes, app.listen, etc.)
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/loader.gif', (req, res) => {
+  res.sendFile(__dirname + '/loader.gif');
+});
+
+app.post('/chat', async (req, res) => {
+  try {
+    const userInput = req.body?.userInput;
+    console.log('Incoming /chat req:', userInput);
+
+    if (!userInput) {
+      return res.status(400).json({ error: 'Invalid request body' });
+    }
+
+    const response = await runChat(userInput);
+    res.json({ response });
+  } catch (error) {
+    console.error('Error in chat endpoint:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
