@@ -86,8 +86,7 @@ app.post('/chat', async (req, res) => {
     console.error('Error in chat endpoint:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-  chat.history.push({ role: 'user', parts: [{ text: userInput }] });
-  chat.history.push({ role: 'model', parts: [{ text: response.text() }] });
+
 });
 
 app.listen(port, () => {
