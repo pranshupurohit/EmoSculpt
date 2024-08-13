@@ -33,18 +33,30 @@ h1 {
   font-weight: 500;
 }
 
-/* Logo Styles */
+/* Top strip styles */
+.top-strip {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
 .logo {
   display: block; 
   max-width: 150px;
-  margin: 0 auto 10px; 
+  margin-right: 15px;
 }
 
-.chat-logo {
-  display: inline-block;
-  max-width: 30px;
-  vertical-align: middle; 
-  margin-right: 10px;
+.title {
+  font-size: 2.5vh; /* Adjust as needed */
+  font-weight: 500;
+}
+
+.title .emo {
+  color: red;
+}
+
+.title .sculpt {
+  color: black;
 }
 
 #chat-history {
@@ -147,7 +159,12 @@ button {
 </head>
 <body>
   <div id="chat-container">
-    <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="logo">
+    <div class="top-strip">
+      <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="logo">
+      <h1 class="title">
+        <span class="emo">Emo</span><span class="sculpt">Sculpt</span>
+      </h1>
+    </div>
     <div id="chat-history"></div>
     <form id="chat-form">
       <input type="text" id="user-input" placeholder="Enter your message">
