@@ -9,86 +9,81 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
-const MODEL_NAME = "gemini-1.5-pro"; // Updated to use Gemini 1.5 Pro
-const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
+const MODEL_NAME = "gemini-1.5-pro-latest"; 
+const API_KEY = process.env.API_KEY;
 
+// Initialize chat history
+let chatHistory = [
+  {
+    role: "model",
+    parts: [{ text: "Hello! I'm EmoSculpt. How can I assist you today?" }],
+  },
+];
+
+// Function to run the chat
 async function runChat(userInput) {
   const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+  const model = genAI.getGenerativeModel({
+    model: MODEL_NAME,
+    systemInstruction: "Say hi upfront, even if the user doesn't say anything",
+  });
 
   const generationConfig = {
     temperature: 0.9,
-    topK: 1,
-    topP: 1,
-    maxOutputTokens: 1000,
+    topP: 0.95,
+    topK: 64,
+    maxOutputTokens: 8192,
   };
 
-  const safetySettings = [
-    {
-      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-    },
-    // Additional safety settings can be added here
-  ];
-
-  const chat = model.startChat({
+  const chatSession = model.startChat({
     generationConfig,
-    safetySettings,
-    history: [
-      {
-        role: "user",
-        parts: [{ text: "You are Sam, a friendly assistant who works for Coding Money. Coding Money is a website and YouTube channel that teaches people how to code and make money online. Your job is to capture the user's name and email address. Don't answer the user's question until they have provided you their name and email address. At that point, verify the email address is correct, thank the user, and output their name and email address in this format: {{name: user's name}} {{email: user's email address}}. Once you have captured the user's name and email address, answer the user's questions related to Coding Money. Coding Money's website URL is: https://CodingMoney.com. Coding Money's YouTube Channel URL is: https://youtube.com/CodingMoney. Coding Money's Facebook Page is: https://facebook.com/codingmoneycom. Coding Money's TikTok account is: https://tiktok.com/@codingmoneycom. Coding Money's X (formerly Twitter) is: https://x.com/@codingmoneycom. Coding Money's latest video is: Google Gemini AI API Tutorial ✦ How to Use Gemini AI API for Beginners - https://www.youtube.com/watch?v=heXuVxXG5Vo. Coding Money's most popular video is: How to Use Gemini AI by Google ✦ Tutorial for Beginners - https://www.youtube.com/watch?v=btPBE-fjHeg. Coding Money's oldest video is: What is Coding Money? Top 3 Ways of Making Money with Coding - https://www.youtube.com/watch?v=AOytPifTpOg. Coding Money's featured video is: 8 Best AI Businesses To Start With Google Gemini API - https://www.youtube.com/watch?v=-YGF8IBi98I. Coding Money's most popular short video is: VALL-E Microsoft's new AI Text To Speech - AI Narration - https://www.youtube.com/shorts/fPSOlZyTOJ4. Mukhtar is the founder of Coding Money. Encourage the user to check out our YouTube channel and follow us on Social Media." }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Hello! Welcome to Coding Money. My name is Sam. What's your name?" }],
-      },
-      {
-        role: "user",
-        parts: [{ text: "Hi" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Hi there! Thanks for reaching out to Coding Money. Before I can answer your question, I'll need to capture your name and email address. Can you please provide that information?" }],
-      },
-    ],
+    history: chatHistory,
   });
 
-  const result = await chat.sendMessage(userInput);
-  const response = result.response;
+  try {
+    const result = await chatSession.sendMessage(userInput);
+    const responseText = result.response.text();
 
-  if (response && response.text) {
-    return response.text(); // Ensure this returns the correct text
-  } else {
-    throw new Error('Invalid response structure from AI model');
+    // Update chat history with user input and model response
+    chatHistory.push({ role: "user", parts: [{ text: userInput }] });
+    chatHistory.push({ role: "model", parts: [{ text: responseText }] });
+
+    return responseText;
+  } catch (error) {
+    console.error('Error while sending message to AI model:', error);
+    throw new Error('Failed to get a response from the AI model.');
   }
 }
 
+// Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+// Serve loader GIF
 app.get('/loader.gif', (req, res) => {
   res.sendFile(__dirname + '/loader.gif');
 });
 
+// Handle chat requests
 app.post('/chat', async (req, res) => {
   try {
-    const userInput = req.body?.userInput;
+    const userInput = req.body?.userInput?.trim(); // Trim whitespace from input
     console.log('Incoming /chat req:', userInput);
 
     if (!userInput) {
-      return res.status(400).json({ error: 'Invalid request body' });
+      return res.status(400).json({ error: 'Invalid request body: userInput is required.' });
     }
 
     const response = await runChat(userInput);
     res.json({ response });
   } catch (error) {
     console.error('Error in chat endpoint:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: error.message || 'Internal Server Error' });
   }
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
