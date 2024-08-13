@@ -7,11 +7,11 @@ This repository contains the code for EmoSculpt, an AI-powered chatbot designed 
 * Interactive emotional workouts ("Reps")
 * Gamified experience with different workout templates and challenges
 * Personalized feedback and progress tracking
-* Dark mode web interface inspired by Google AI Studio
+* Dark mode web interface
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your-username/emosculpt-chatbot.git`
-2. Navigate to the project directory: `cd emosculpt-chatbot`
+1. Clone the repository: `git clone https://github.com/pranshupurohit/EmoSculpt.git`
+2. Navigate to the project directory: `cd EmoSculpt`
 3. Install dependencies: `npm install`
 4. Create a `.env` file in the root directory and add your Gemini API key: 
