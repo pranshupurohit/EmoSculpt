@@ -8,14 +8,14 @@ const dotenv = require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
-
 const MODEL_NAME = "gemini-1.5-pro"; 
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.API_KEY; // Or process.env.GEMINI_API_KEY if that's what you're using
 
 async function runChat(userInput) {
   const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME }); 
+  const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
+  // *** START OF YOUR GEMINI CODE (PASTE HERE) *** 
   const generationConfig = {
     temperature: 0,
     topP: 0.95,
@@ -26,40 +26,33 @@ async function runChat(userInput) {
 
   const chatSession = model.startChat({
     generationConfig,
+    // safetySettings: Adjust safety settings as needed
     history: [
       {
         role: "user",
         parts: [
-          {text: "This is prompt 1 to do your job"},
-          {text: "This is Prompt 2 to do your Job\n"},
+          {text: "Tell User about emotional styles when he replies to your hi"},
+          {text: "Tell user about emotional dimensions after asking if he's more interested to know"},
         ],
       },
     ],
   });
 
-  const result = await chatSession.sendMessage(userInput);
-  console.log(result.response.text());
-
-  if (result && result.response && result.response.text) {
-    return result.response.text; // Access text directly if it's a string property
-  } else {
-    throw new Error('Invalid response structure from AI model');
-  }
+  const result = await chatSession.sendMessage(userInput);  // Pass user input to chatSession
+  return result.response.text();
+  // *** END OF YOUR GEMINI CODE *** 
 }
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-
 app.get('/loader.gif', (req, res) => {
   res.sendFile(__dirname + '/loader.gif');
 });
-
 app.post('/chat', async (req, res) => {
   try {
     const userInput = req.body?.userInput;
-    console.log('Incoming /chat req:', userInput);
-
+    console.log('incoming /chat req', userInput);
     if (!userInput) {
       return res.status(400).json({ error: 'Invalid request body' });
     }
