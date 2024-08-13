@@ -14,4 +14,4 @@ This repository contains the code for EmoSculpt, an AI-powered chatbot designed 
 1. Clone the repository: `git clone https://github.com/pranshupurohit/EmoSculpt.git`
 2. Navigate to the project directory: `cd EmoSculpt`
 3. Install dependencies: `npm install`
-4. Create a `.env` file in the root directory and add your Gemini API key: 
+4. Create a `.env` file in the root directory and add your Gemini API key.
