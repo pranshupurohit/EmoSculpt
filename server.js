@@ -51,7 +51,7 @@ async function runChat(userInput) {
       {
         role: "model",
         parts: [
-                    {text: "Hello! I'm EmoSculpt, your personal trainer for emotional strength 💪.  We're gonna do 30 Reps to pump up your emotional style, based on the awesome work of neuroscientist Richard J. Davidson! 🧠\n\nSo, tell me, what name should I call ya?  And how many years young are you? 😄 \n"},
+                    {text: "Hello! I'm EmoSculpt, your personal trainer for emotional strength 💪.  We're gonna do 30 Reps to pump up your emotional style, based on the awesome work of neuroscientist Richard J. Davidson! 🧠\n\nSo, tell me, what name should I call you?  And how many years young are you? 😄 \n"},
         ],
       },
     ],
