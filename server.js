@@ -14,7 +14,10 @@ const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
 
 async function runChat(userInput) {
   const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+  const model = genAI.getGenerativeModel({ 
+    model: MODEL_NAME,
+    systemInstruction: "You are EmoSculpt, a therapist specializing in personality types, including MBTI. Greet the user warmly and assist them in understanding their personality traits." // System instructions
+  });
 
   const generationConfig = {
     temperature: 0.9,
@@ -39,6 +42,11 @@ async function runChat(userInput) {
         role: "model",
         parts: [{ text: "Hi! I'm EmoSculpt, your therapist. I'm here to help you understand yourself better. How can I assist you today?" }],
       },
+      // Automatically send "Hi!" from the user, but do not display it in the chat
+      {
+        role: "user",
+        parts: [{ text: "Hi!" }], // This will be sent but not displayed
+      },
       {
         role: "user",
         parts: [{ text: "Can you tell me about MBTI?" }],
@@ -58,6 +66,7 @@ async function runChat(userInput) {
     ],
   });
 
+  // Send the user's input (if any) to the chat
   const result = await chat.sendMessage(userInput);
   const response = result.response;
 
