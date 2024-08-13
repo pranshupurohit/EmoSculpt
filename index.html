@@ -1,215 +1,250 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>EmoSculpt: The Emotional Gym</title>
-<style>
-body {
-  background-color: #1F1F1F;
-  color: #FFFFFF;
-  font-family: 'Roboto Mono', monospace;
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2vh; /* Base font size relative to screen height */
-}
+    <title>EmoSculpt: The Emotional Gym</title>
+    <style>
+        body {
+            background-color: #1F1F1F;
+            color: #FFFFFF;
+            font-family: 'Roboto Mono', monospace;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2vh; /* Base font size relative to screen height */
+        }
 
-#chat-container {
-  background-color: #2B2B2B;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.1);
-  width: 100%;
-  height: 90vh; /* Reduced height for better visibility on mobile */
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
+        #chat-container {
+            background-color: #2B2B2B;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.1);
+            width: 100%;
+            height: 90vh; /* Reduced height for better visibility on mobile */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 500;
-}
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
 
-/* Logo Styles */
-.logo {
-  display: block; 
-  max-width: 12vw; /* Scales with the viewport width */
-  margin: 0 auto 10px; 
-}
+        /* Logo Styles */
+        .logo {
+            display: block; 
+            max-width: 12vw; /* Scales with the viewport width */
+            margin: 0 auto 10px; 
+        }
 
-.chat-logo {
-  display: inline-block;
-  max-width: 3vw; /* Scales with the viewport width */
-  vertical-align: middle; 
-  margin-right: 10px;
-}
+        #chat-history {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #404040;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
 
-#chat-history {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 10px;
-  border: 1px solid #404040;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
+        .user-message, 
+        .bot-message {
+            padding: 2vh; /* Padding relative to screen height */
+            margin-bottom: 1vh;
+            border-radius: 8px;
+            line-height: 1.6;
+            display: flex;
+            align-items: center; /* Center the loader and text vertically */
+        }
 
-.user-message, 
-.bot-message {
-  padding: 2vh; /* Padding relative to screen height */
-  margin-bottom: 1vh;
-  border-radius: 8px;
-  line-height: 1.6;
-}
+        .user-message {
+            text-align: right;
+            background-color: #424242; 
+        }
 
-.user-message {
-  text-align: right;
-  background-color: #424242; 
-}
+        .bot-message {
+            text-align: left;
+            background-color: #333333;
+        }
 
-.bot-message {
-  text-align: left;
-  background-color: #333333;
-}
+        .loader {
+            width: 1.5em; /* Smaller loader size */
+            height: 1.5em; /* Smaller loader size */
+            border: 0.25em solid #673AB7;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin-right: 10px; /* Space between loader and text */
+        }
 
-form {
-  display: flex;
-  position: relative; /* Ensure form is positioned relative to the container */
-}
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
-input {
-  flex-grow: 1;
-  margin-right: 10px;
-  padding: 1.5vh;
-  border: 1px solid #505050;
-  border-radius: 5px;
-  background-color: #333333;
-  color: #FFFFFF;
-  font-size: 2vh;
-}
+        form {
+            display: flex;
+            position: relative; /* Ensure form is positioned relative to the container */
+        }
 
-button {
-  background-color: #673AB7;
-  color: white;
-  border: none;
-  padding: 1.5vh 2vh;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 2vh;
-}
+        input {
+            flex-grow: 1;
+            margin-right: 10px;
+            padding: 1.5vh;
+            border: 1px solid #505050;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #FFFFFF;
+            font-size: 2vh;
+        }
 
-#loader {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+        button {
+            background-color: #673AB7;
+            color: white;
+            border: none;
+            padding: 1.5vh 2vh;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 2vh;
+        }
 
-/* Responsive text size based on screen width */
-@media (max-width: 768px) {
-  body {
-    font-size: 1.8vh;
-  }
+        /* Responsive text size based on screen width */
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.8vh;
+            }
 
-  #chat-container {
-    padding: 15px;
-    height: 85vh; /* Reduce height on smaller screens */
-  }
+            #chat-container {
+                padding: 15px;
+                height: 85vh; /* Reduce height on smaller screens */
+            }
 
-  button {
-    padding: 1.2vh 1.5vh;
-  }
+            button {
+                padding: 1.2vh 1.5vh;
+            }
 
-  .logo {
-    max-width: 15vw; /* Adjust logo size for smaller screens */
-  }
+            .logo {
+                max-width: 15vw; /* Adjust logo size for smaller screens */
+            }
+        }
 
-  .chat-logo {
-    max-width: 5vw; /* Adjust chat logo size for smaller screens */
-  }
-}
+        @media (max-width: 480px) {
+            body {
+                font-size: 1.6vh;
+            }
 
-@media (max-width: 480px) {
-  body {
-    font-size: 1.6vh;
-  }
+            #chat-container {
+                padding: 10px;
+                height: 80vh; /* Further reduce height on small screens */
+            }
 
-  #chat-container {
-    padding: 10px;
-    height: 80vh; /* Further reduce height on small screens */
-  }
+            input {
+                padding: 2vh; /* Increase padding for input */
+            }
 
-  input {
-    padding: 2vh; /* Increase padding for input */
-  }
+            button {
+                padding: 1.5vh 2vh;
+            }
 
-  button {
-    padding: 1.5vh 2vh;
-  }
-
-  .logo {
-    max-width: 20vw; /* Further adjust logo size for smaller screens */
-  }
-
-  .chat-logo {
-    max-width: 8vw; /* Further adjust chat logo size for smaller screens */
-  }
-}
-</style>
+            .logo {
+                max-width: 20vw; /* Further adjust logo size for smaller screens */
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="chat-container">
-    <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="logo">
-    <div id="chat-history"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Enter your message">
-      <button type="submit">Send</button>
-    </form>
-  </div>
-  <div id="loader">
-    <img src="loader.gif" width="150px" alt="Loading...">
-  </div>
-  <script>
-    const chatHistory = document.getElementById('chat-history');
-    const userInput = document.getElementById('user-input');
-    const form = document.getElementById('chat-form');
+    <div id="chat-container">
+        <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="logo">
+        <div id="chat-history"></div>
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Enter your message">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <div id="loader" style="display: none;">
+        <img src="loader.gif" width="150px" alt="Loading...">
+    </div>
+    <script>
+        const chatHistory = document.getElementById('chat-history');
+        const userInput = document.getElementById('user-input');
+        const form = document.getElementById('chat-form');
 
-    async function sendMessage() {
-      const userMessage = userInput.value;
-      userInput.value = ''; // Clear input field
-      try {
-        const response = await fetch('/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userInput: userMessage }),
+        // Welcome message to be displayed in the chat window
+        const welcomeMessage = `Hello! I'm EmoSculpt, your personal trainer for emotional strength. I'm based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
+
+Just like physical fitness, your emotional well-being depends on building up your inner strengths. Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
+
+Resilience: How quickly you bounce back from setbacks.
+Outlook: Your tendency towards optimism or pessimism.
+Social Intuition: Your ability to read social cues.
+Self-Awareness: How well you understand your own emotions.
+Sensitivity to Context: How well you adapt your emotions to different situations.
+Attention: Your ability to focus and concentrate.
+
+These dimensions influence how we respond to stress, connect with others, and experience the world.`;
+
+        // Function to display the welcome message
+        function displayWelcomeMessage() {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('bot-message');
+            messageElement.textContent = welcomeMessage;
+
+            chatHistory.appendChild(messageElement);
+            chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+        }
+
+        async function sendMessage() {
+            const userMessage = userInput.value;
+            userInput.value = ''; // Clear input field
+            try {
+                // Show the loader
+                const loader = document.createElement('span');
+                loader.classList.add('loader');
+                const botMessageElement = document.createElement('div');
+                botMessageElement.classList.add('bot-message');
+                botMessageElement.appendChild(loader);
+                botMessageElement.appendChild(document.createTextNode("...")); // Placeholder text while loading
+                chatHistory.appendChild(botMessageElement);
+                chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userInput: userMessage }),
+                });
+
+                const data = await response.json();
+                const botMessage = data.response;
+
+                // Replace the placeholder text with the actual bot message
+                botMessageElement.textContent = ""; // Clear the loader
+                botMessageElement.appendChild(loader); // Keep the loader
+                botMessageElement.appendChild(document.createTextNode(botMessage)); // Append the actual message
+
+                chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent form submission
+            sendMessage();
         });
 
-        const data = await response.json();
-        const botMessage = data.response;
-        chatHistory.innerHTML += `<div class="user-message">${userMessage}</div>`; 
-        chatHistory.innerHTML += `<div class="bot-message"><img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="chat-logo">${botMessage}</div>`; // Logo before message
-
-        // Scroll to the bottom of the chat history
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault(); // Prevent form submission
-      const loader = document.getElementById('loader');
-      loader.style.display = 'block'; // Show the loader
-      sendMessage().finally(() => {
-        loader.style.display = 'none'; // Hide the loader after the message is sent
-      });
-    });
-  </script>
+        // Call the displayWelcomeMessage function when the page loads
+        window.addEventListener('load', displayWelcomeMessage);
+    </script>
 </body>
 </html>
