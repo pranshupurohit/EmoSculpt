@@ -40,6 +40,13 @@
             margin: 0 auto 10px; 
         }
 
+        .chat-logo {
+            display: inline-block;
+            max-width: 3vw; /* Scales with the viewport width */
+            vertical-align: middle; 
+            margin-right: 10px;
+        }
+
         #chat-history {
             flex-grow: 1;
             overflow-y: auto;
@@ -55,8 +62,6 @@
             margin-bottom: 1vh;
             border-radius: 8px;
             line-height: 1.6;
-            display: flex;
-            align-items: center; /* Center the loader and text vertically */
         }
 
         .user-message {
@@ -67,13 +72,6 @@
         .bot-message {
             text-align: left;
             background-color: #333333;
-        }
-
-        .loader {
-            width: 1.5em; /* Smaller loader size */
-            height: 1.5em; /* Smaller loader size */
-            margin-right: 10px; /* Space between loader and text */
-            display: none; /* Initially hidden */
         }
 
         form {
@@ -103,6 +101,14 @@
             font-size: 2vh;
         }
 
+        #loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
         /* Responsive text size based on screen width */
         @media (max-width: 768px) {
             body {
@@ -120,6 +126,10 @@
 
             .logo {
                 max-width: 15vw; /* Adjust logo size for smaller screens */
+            }
+
+            .chat-logo {
+                max-width: 5vw; /* Adjust chat logo size for smaller screens */
             }
         }
 
@@ -144,6 +154,10 @@
             .logo {
                 max-width: 20vw; /* Further adjust logo size for smaller screens */
             }
+
+            .chat-logo {
+                max-width: 8vw; /* Further adjust chat logo size for smaller screens */
+            }
         }
     </style>
 </head>
@@ -155,6 +169,9 @@
             <input type="text" id="user-input" placeholder="Enter your message">
             <button type="submit">Send</button>
         </form>
+    </div>
+    <div id="loader">
+        <img src="loader.gif" width="150px" alt="Loading...">
     </div>
     <script>
         const chatHistory = document.getElementById('chat-history');
@@ -177,10 +194,12 @@ These dimensions influence how we respond to stress, connect with others, and ex
 
         // Function to display the welcome message
         function displayWelcomeMessage() {
+            // Create a new message element
             const messageElement = document.createElement('div');
-            messageElement.classList.add('bot-message');
-            messageElement.textContent = welcomeMessage;
+            messageElement.classList.add('bot-message'); // Add class for styling
+            messageElement.textContent = welcomeMessage; // Set the message content
 
+            // Append the message to the chat history
             chatHistory.appendChild(messageElement);
             chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
         }
@@ -189,20 +208,6 @@ These dimensions influence how we respond to stress, connect with others, and ex
             const userMessage = userInput.value;
             userInput.value = ''; // Clear input field
             try {
-                // Show the loader
-                const botMessageElement = document.createElement('div');
-                botMessageElement.classList.add('bot-message');
-
-                const loader = document.createElement('img');
-                loader.src = 'loader.gif'; // Use the local loader.gif
-                loader.classList.add('loader');
-                loader.style.display = 'inline-block'; // Show loader
-
-                botMessageElement.appendChild(loader);
-                botMessageElement.appendChild(document.createTextNode("...")); // Placeholder text while loading
-                chatHistory.appendChild(botMessageElement);
-                chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
-
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
@@ -213,13 +218,11 @@ These dimensions influence how we respond to stress, connect with others, and ex
 
                 const data = await response.json();
                 const botMessage = data.response;
+                chatHistory.innerHTML += `<div class="user-message">${userMessage}</div>`; 
+                chatHistory.innerHTML += `<div class="bot-message"><img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="chat-logo">${botMessage}</div>`; // Logo before message
 
-                // Replace the placeholder text with the actual bot message
-                botMessageElement.textContent = ""; // Clear the loader
-                botMessageElement.appendChild(loader); // Keep the loader
-                botMessageElement.appendChild(document.createTextNode(botMessage)); // Append the actual message
-
-                chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to the bottom
+                // Scroll to the bottom of the chat history
+                chatHistory.scrollTop = chatHistory.scrollHeight;
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -227,7 +230,11 @@ These dimensions influence how we respond to stress, connect with others, and ex
 
         form.addEventListener('submit', (event) => {
             event.preventDefault(); // Prevent form submission
-            sendMessage();
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block'; // Show the loader
+            sendMessage().finally(() => {
+                loader.style.display = 'none'; // Hide the loader after the message is sent
+            });
         });
 
         // Call the displayWelcomeMessage function when the page loads
