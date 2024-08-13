@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EmoSculpt: The Emotional Gym</title>
     <style>
         body {
@@ -35,16 +37,34 @@
 
         /* Logo Styles */
         .logo {
-            display: block; 
-            max-width: 12vw; /* Scales with the viewport width */
-            margin: 0 auto 10px; 
+            display: flex;
+            align-items: center; /* Center items vertically */
+            margin: 0 auto 10px; /* Center the logo */
         }
 
         .chat-logo {
             display: inline-block;
-            max-width: 3vw; /* Scales with the viewport width */
+            max-width: 10%; /* Adjust the max-width to a percentage */
+            height: auto; /* Maintain aspect ratio */
             vertical-align: middle; 
             margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 2.5vh; /* Adjust font size relative to screen height */
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text .emo {
+            color: #ff0039; /* Red color for "Emo" */
+        }
+
+        .logo-text .sculpt {
+            color: #000; /* Black color for "Sculpt" */
+            background-color: #2B2B2B; /* Match background color */
+            padding: 0 5px; /* Padding for better visibility */
+            border-radius: 5px; /* Rounded corners */
         }
 
         #chat-history {
@@ -124,12 +144,8 @@
                 padding: 1.2vh 1.5vh;
             }
 
-            .logo {
-                max-width: 15vw; /* Adjust logo size for smaller screens */
-            }
-
             .chat-logo {
-                max-width: 5vw; /* Adjust chat logo size for smaller screens */
+                max-width: 15%; /* Adjust the max-width for smaller screens */
             }
         }
 
@@ -151,19 +167,20 @@
                 padding: 1.5vh 2vh;
             }
 
-            .logo {
-                max-width: 20vw; /* Further adjust logo size for smaller screens */
-            }
-
             .chat-logo {
-                max-width: 8vw; /* Further adjust chat logo size for smaller screens */
+                max-width: 20%; /* Further adjust chat logo size for smaller screens */
             }
         }
     </style>
 </head>
 <body>
     <div id="chat-container">
-        <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="logo">
+        <div class="logo">
+            <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo" class="chat-logo">
+            <div class="logo-text">
+                <span class="emo">Emo</span><span class="sculpt">Sculpt</span>
+            </div>
+        </div>
         <div id="chat-history"></div>
         <form id="chat-form">
             <input type="text" id="user-input" placeholder="Enter your message">
