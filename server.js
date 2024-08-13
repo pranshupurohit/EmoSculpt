@@ -43,9 +43,11 @@ async function runChat(userInput) {
       const result = await chatSession.sendMessage(userInput);
       console.log('AI Model Result:', result);
 
+      // Check the structure of the result
       if (result && result.response && result.response.text) {
         return result.response.text; // Access text directly if it's a string property
       } else {
+        console.error('Unexpected response structure:', result);
         throw new Error('Invalid response structure from AI model');
       }
     } catch (error) {
@@ -76,6 +78,7 @@ app.post('/chat', async (req, res) => {
     }
 
     const response = await runChat(userInput);
+    console.log('Response from runChat:', response); // Log the response from runChat
     res.json({ response });
   } catch (error) {
     console.error('Error in chat endpoint:', error);
