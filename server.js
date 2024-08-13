@@ -13,20 +13,13 @@ const API_KEY = process.env.API_KEY;
 
 async function runChat(userInput) {
   const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME }); 
 
-  // *** PASTE YOUR GEMINI 1.5 PRO JAVASCRIPT CODE HERE, REPLACING THE FOLLOWING LINES: *** 
+  // *** GEMINI 1.5 PRO JAVASCRIPT CODE*** 
   /*
  * Install the Generative AI SDK
  *
  * $ npm install @google/generative-ai
  */
-
-const {
-  GoogleGenerativeAI,
-  HarmCategory,
-  HarmBlockThreshold,
-} = require("@google/generative-ai");
 
 const apiKey = process.env.GEMINI_API_KEY;
 
