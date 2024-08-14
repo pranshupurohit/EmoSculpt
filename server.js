@@ -41,7 +41,18 @@ async function runChat(userInput) {
 
   // Define the history with system instructions and example data
   const history = [
-   
+    {
+        role: "user",
+        parts: [
+          {text: "I'll be uploading a SystemInstructions.json file now"},
+        ],
+      },
+      {
+        role: "model",
+        parts: [
+          {text: "I'm ready!  I'm excited to see what new instructions you have for me in that file. Let me know if you need any help with the upload or have any questions once I've processed the information. \n"},
+        ],
+      },
     {
       role: "user",
       parts: systemInstructions
