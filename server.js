@@ -1,10 +1,21 @@
 const express = require('express');
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const dotenv = require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
+
+// Load instructions from JSON file
+const instructionsPath = path.join(__dirname, 'systeminstructions.json');
+let instructions = {};
+try {
+  instructions = JSON.parse(fs.readFileSync(instructionsPath, 'utf8'));
+} catch (error) {
+  console.error('Error loading instructions from JSON:', error);
+}
 
 const MODEL_NAME = "gemini-1.5-pro-latest"; // Replace with your actual model name
 const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
@@ -25,7 +36,8 @@ async function runChat(userInput) {
       model: MODEL_NAME
     });
 
-    const safetySettings = [
+    // Apply safety settings from JSON file
+    const safetySettings = instructions.safetySettings || [
       {
         category: HarmCategory.HARM_CATEGORY_HARASSMENT,
         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
@@ -56,7 +68,6 @@ async function runChat(userInput) {
     throw error; // Re-throw the error for the outer catch block to handle
   }
 }
-
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
