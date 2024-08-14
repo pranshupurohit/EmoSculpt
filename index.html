@@ -50,18 +50,20 @@
         .chat-header h1 {
             margin: 0;
             font-size: 24px;
-            background-color: #f0f0f0; /* Off-white background */
+            background-color: rgb(213, 210, 205); /* Off-white background */
             padding: 10px 20px; /* Padding for bubble effect */
             border-radius: 20px; /* Rounded corners for bubble effect */
             display: inline-block; /* Display the text inline */
+            height: 60px; /* Set the height to match the top bar */
+            line-height: 60px; /* Center the text vertically */
         }
 
         .chat-header h1 span:first-child {
-            color: #ff0000; /* Red color for "Emo" */
+            color: rgb(138, 40, 39); /* Red color for "Emo" */
         }
 
         .chat-header h1 span:last-child {
-            color: #000000; /* Black color for "Sculpt" */
+            color: rgb(3, 10, 3); /* Black color for "Sculpt" */
         }
 
         .chat-window {
@@ -87,7 +89,7 @@
         }
 
         .user-message {
-            background-color: #e0e0e0; /* Whitish gray for user messages */
+            background-color: #d5d5d5; /* Whitish gray for user messages */
             color: #000000; /* Black text for user messages */
             align-self: flex-end; /* Align user messages to the right */
             margin-left: auto; /* Push user messages to the right */
@@ -142,7 +144,7 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo"> <!-- Logo URL -->
+            <img src="https://ibb.co/1mMVthy" alt="EmoSculpt Logo"> <!-- Updated logo URL -->
             <h1><span>Emo</span><span>Sculpt</span></h1>
         </div>
         <div class="chat-window" id="chat-window">
