@@ -22,9 +22,9 @@ async function runChat(userInput) {
     maxOutputTokens: 1000,
   };
 
-  // Initialize the model
   const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME
+    model: MODEL_NAME,
+    systemInstructions: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name." // Directly passing system instructions
   });
   
   const safetySettings = [
@@ -35,17 +35,10 @@ async function runChat(userInput) {
     // Additional safety settings can be added here
   ];
 
-  // Start the chat session and pass system instructions here
   const chat = model.startChat({
     generationConfig,
     safetySettings,
     history: [], // Keep history empty if you don't want to include previous messages
-  });
-
-  // Send the system instruction before sending user input
-  await chat.sendMessage({
-    role: "system",
-    content: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."
   });
 
   // Send the user's input (if any) to the chat
