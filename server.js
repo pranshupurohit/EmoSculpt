@@ -45,9 +45,6 @@ async function runChat(userInput) {
       // Additional safety settings can be added here
     ];
 
-    console.log('Generation Config:', generationConfig);
-    console.log('Safety Settings:', safetySettings);
-
     const chat = model.startChat({
       generationConfig,
       safetySettings,
@@ -59,10 +56,10 @@ async function runChat(userInput) {
     const response = result.response;
 
     console.log('Chat result:', result);
-    console.log('Response:', response);
 
-    if (response && response.text) {
-      return response.text(); // Ensure this returns the correct text
+    // Extract text from response
+    if (response && typeof response.text === 'function') {
+      return await response.text(); // Call the function to get the actual text
     } else {
       throw new Error('Invalid response structure from AI model');
     }
