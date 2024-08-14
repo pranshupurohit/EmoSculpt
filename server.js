@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
-const MODEL_NAME = "gemini-1.5-pro"; // Using Gemini 1.5 Pro Latest
+const MODEL_NAME = "gemini-1.5-pro-latest"; // Using Gemini 1.5 Pro Latest
 const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
 
 async function runChat(userInput) {
@@ -22,9 +22,7 @@ async function runChat(userInput) {
     maxOutputTokens: 1000,
   };
 
-  const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME
-  });
+  const model = genAI.getGenerativeModel({ model: MODEL_NAME});
   
   const safetySettings = [
     {
