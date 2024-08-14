@@ -55,7 +55,7 @@ async function runChat(userInput) {
       },
     {
       role: "user",
-      parts: userprompt
+      parts:  [ {json: userprompt}]
     }
   ];
 
