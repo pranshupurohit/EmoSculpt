@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmoSculpt - Emotional Fitness Trainer</title>
+    <title>EmoSculpt - Your AI-powered emotional gym</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #e9ecef;
+            background-color: #f0f0f0;
         }
 
         .chat-container {
@@ -33,6 +33,14 @@
             color: #ffffff;
             padding: 20px;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header img {
+            height: 40px;
+            margin-right: 10px;
         }
 
         .chat-header h1 {
@@ -112,7 +120,8 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <h1>EmoSculpt - Emotional Fitness Trainer</h1>
+            <img src="https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/21502417/db6d3034-b391-4b6a-95f2-8c208786b220/logo.png" alt="EmoSculpt Logo">
+            <h1>EmoSculpt - Your AI-powered emotional gym</h1>
         </div>
         <div class="chat-window" id="chat-window">
             <!-- Chat messages will be dynamically added here -->
@@ -136,10 +145,22 @@
                 inputField.value = '';
 
                 // Here you would send the message to your server or AI model
-                // For example:
-                // fetch('/chat', { method: 'POST', body: JSON.stringify({ userInput: userMessage }) })
-                //   .then(response => response.json())
-                //   .then(data => displayMessage('bot', data.response));
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userInput: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response) {
+                        displayMessage('bot', data.response);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
         }
 
@@ -168,18 +189,20 @@
 
         // Display the welcome message when the page loads
         window.onload = function() {
-            const welcomeMessage = `Hello! I'm EmoSculpt, your personal trainer for emotional strength. I'm based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
+            const welcomeMessage = `Welcome to EmoSculpt, your AI-powered emotional gym! I'm here to help you build emotional strength and resilience.
 
-Just like physical fitness, your emotional well-being depends on building up your inner strengths. Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
+Just like physical fitness, your emotional well-being depends on building up your inner strengths. EmoSculpt is based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
 
-Resilience: How quickly you bounce back from setbacks.
-Outlook: Your tendency towards optimism or pessimism.
-Social Intuition: Your ability to read social cues.
-Self-Awareness: How well you understand your own emotions.
-Sensitivity to Context: How well you adapt your emotions to different situations.
-Attention: Your ability to focus and concentrate.
+Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
 
-These dimensions influence how we respond to stress, connect with others, and experience the world.`;
+1. Resilience: How quickly you bounce back from setbacks.
+2. Outlook: Your tendency towards optimism or pessimism.
+3. Social Intuition: Your ability to read social cues.
+4. Self-Awareness: How well you understand your own emotions.
+5. Sensitivity to Context: How well you adapt your emotions to different situations.
+6. Attention: Your ability to focus and concentrate.
+
+These dimensions influence how we respond to stress, connect with others, and experience the world. Let's work together to understand your emotional style and develop strategies to improve your emotional fitness!`;
             
             displayMessage('bot', welcomeMessage);
         };
