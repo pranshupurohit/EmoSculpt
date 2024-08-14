@@ -14,35 +14,32 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #121212; /* Dark background for dark mode */
+            background-color: #f0f0f0;
         }
 
         .chat-container {
             width: 90%;
             max-width: 600px;
-            background-color: #1e1e1e; /* Dark gray for container */
+            background-color: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 100%;
         }
 
         .chat-header {
-            background-color: #4b0082; /* Dark purple */
+            background-color: #333333; /* Dark gray */
             color: #ffffff;
             padding: 20px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: sticky;
-            top: 0; /* Fixed position */
-            z-index: 10; /* Ensure it stays above other elements */
         }
 
         .chat-header img {
-            height: 50px; /* Adjust height as needed */
+            height: 40px; /* Adjust height as needed */
             margin-right: 10px;
         }
 
@@ -53,10 +50,11 @@
 
         .chat-window {
             flex: 1;
+            height: 400px;
             overflow-y: auto;
             padding: 20px;
-            background-color: #2a2a2a; /* Darker gray for chat window */
-            color: #ffffff; /* White text for messages */
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f8f9fa;
         }
 
         .message {
@@ -67,12 +65,12 @@
         }
 
         .bot-message {
-            background-color: #3a3a3a; /* Slightly lighter gray for bot messages */
+            background-color: #e9ecef;
             align-self: flex-start;
         }
 
         .user-message {
-            background-color: #4b0082; /* Dark purple for user messages */
+            background-color: #333333; /* Dark gray for user messages */
             color: #ffffff;
             align-self: flex-end;
         }
@@ -80,24 +78,20 @@
         .chat-input {
             display: flex;
             padding: 10px;
-            border-top: 1px solid #444; /* Dark border */
-            background-color: #1e1e1e; /* Match container color */
-            position: sticky;
-            bottom: 0; /* Fixed position */
+            border-top: 1px solid #dee2e6;
+            background-color: #ffffff;
         }
 
         .chat-input input {
             flex: 1;
             padding: 10px;
-            border: 1px solid #444; /* Dark border */
+            border: 1px solid #ced4da;
             border-radius: 5px;
             font-size: 16px;
-            background-color: #333; /* Dark input field */
-            color: #ffffff; /* White text in input */
         }
 
         .chat-input button {
-            background-color: #4b0082; /* Dark purple for button */
+            background-color: #333333; /* Dark gray for button */
             color: #ffffff;
             border: none;
             padding: 10px 20px;
@@ -109,7 +103,7 @@
         }
 
         .chat-input button:hover {
-            background-color: #3e006f; /* Darker shade on hover */
+            background-color: #444444; /* Slightly darker shade on hover */
         }
 
         @media (max-width: 768px) {
@@ -126,7 +120,7 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo"> <!-- Logo URL -->
+            <img src="https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/21502417/db6d3034-b391-4b6a-95f2-8c208786b220/logo.png" alt="EmoSculpt Logo"> <!-- Logo URL -->
             <h1>EmoSculpt - Your AI-powered emotional gym</h1>
         </div>
         <div class="chat-window" id="chat-window">
