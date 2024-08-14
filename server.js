@@ -37,7 +37,7 @@ async function runChat(userInput) {
   ];
 
   // Read the example JSON file
-  const systemInstructions = JSON.parse(fs.readFileSync('SystemInstructions.json', 'utf8'));
+  const userprompt = JSON.parse(fs.readFileSync('SystemInstructions.json', 'utf8'));
 
   // Define the history with system instructions and example data
   const history = [
@@ -55,7 +55,7 @@ async function runChat(userInput) {
       },
     {
       role: "user",
-      parts: systemInstructions
+      parts: userprompt
     }
   ];
 
