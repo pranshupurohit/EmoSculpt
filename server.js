@@ -2,14 +2,14 @@
 // Install dependencies: npm install @google/generative-ai express dotenv
 
 const express = require('express');
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
+const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold, SystemMessage } = require('@google/generative-ai');
 const dotenv = require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
-const MODEL_NAME = "gemini-1.5-pro"; // Using Gemini 1.5 Pro
+const MODEL_NAME = "gemini-1.5-pro-latest"; // Using Gemini 1.5 Pro Latest
 const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
 
 async function runChat(userInput) {
@@ -18,13 +18,19 @@ async function runChat(userInput) {
   const generationConfig = {
     temperature: 0,
     topK: 64,
-    topP: .95,
+    topP: 0.95,
     maxOutputTokens: 1000,
   };
 
-const model = genAI.getGenerativeModel({ model: MODEL_NAME,
-  systemInstruction: "Your name is Narendra Sharma, You're a therapist. Introduce yourself to the user and ask their name.",
-});
+  const model = genAI.getGenerativeModel({ 
+    model: MODEL_NAME,
+    systemMessages: [
+      new SystemMessage({
+        role: "system",
+        content: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."
+      })
+    ]
+  });
   
   const safetySettings = [
     {
@@ -37,9 +43,7 @@ const model = genAI.getGenerativeModel({ model: MODEL_NAME,
   const chat = model.startChat({
     generationConfig,
     safetySettings,
-    history: [
-      
-    ],
+    history: [], // Keep history empty if you don't want to include previous messages
   });
 
   // Send the user's input (if any) to the chat
