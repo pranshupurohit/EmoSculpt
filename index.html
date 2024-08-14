@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #121212; /* Dark background */
         }
 
         .chat-container {
@@ -23,14 +23,13 @@
             background-color: #1e1e1e; /* Dark gray for container */
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             height: 100%;
         }
 
         .chat-header {
-            background-color: #4b0082; /* Dark purple */
+            background-color: #333333; /* Dark gray */
             color: #ffffff;
             padding: 20px;
             text-align: center;
@@ -43,7 +42,7 @@
         }
 
         .chat-header img {
-            height: 50px; /* Adjust height as needed */
+            height: 60px; /* Logo height to match top bar */
             margin-right: 10px;
         }
 
@@ -64,18 +63,18 @@
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 20px; /* Rounded corners for chat bubbles */
-            max-width: 80%;
+            max-width: fit-content; /* Only as wide as the text */
             display: inline-block; /* Message width only as wide as the text */
         }
 
         .bot-message {
-            background-color: #3a3a3a; /* Slightly lighter gray for bot messages */
+            background-color: #444444; /* Slightly lighter gray for bot messages */
             align-self: flex-start; /* Align bot messages to the left */
             margin-right: auto; /* Push bot messages to the left */
         }
 
         .user-message {
-            background-color: #4b0082; /* Dark purple for user messages */
+            background-color: #007bff; /* Blue for user messages */
             color: #ffffff;
             align-self: flex-end; /* Align user messages to the right */
             margin-left: auto; /* Push user messages to the right */
@@ -85,7 +84,7 @@
             display: flex;
             padding: 10px;
             border-top: 1px solid #444; /* Dark border */
-            background-color: #1e1e1e; /* Match container color */
+            background-color: #333333; /* Match container color */
             position: sticky;
             bottom: 0; /* Fixed position */
         }
@@ -96,12 +95,12 @@
             border: 1px solid #444; /* Dark border */
             border-radius: 5px;
             font-size: 16px;
-            background-color: #333; /* Dark input field */
+            background-color: #555; /* Dark input field */
             color: #ffffff; /* White text in input */
         }
 
         .chat-input button {
-            background-color: #4b0082; /* Dark purple for button */
+            background-color: #007bff; /* Blue for button */
             color: #ffffff;
             border: none;
             padding: 10px 20px;
@@ -113,7 +112,7 @@
         }
 
         .chat-input button:hover {
-            background-color: #3e006f; /* Darker shade on hover */
+            background-color: #0056b3; /* Darker shade on hover */
         }
 
         @media (max-width: 768px) {
