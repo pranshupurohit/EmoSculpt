@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #f4f7fa;
         }
 
         .chat-container {
@@ -29,7 +29,7 @@
         }
 
         .chat-header {
-            background-color: #343a40;
+            background-color: #007bff; /* Primary color */
             color: #ffffff;
             padding: 20px;
             text-align: center;
@@ -39,8 +39,8 @@
         }
 
         .chat-header img {
-            height: 40px;
-            margin-right: 10px;
+            height: 40px; /* Adjust height as needed */
+            margin-right: 10px; /* Space between logo and title */
         }
 
         .chat-header h1 {
@@ -70,7 +70,7 @@
         }
 
         .user-message {
-            background-color: #343a40;
+            background-color: #007bff; /* Primary color for user messages */
             color: #ffffff;
             align-self: flex-end;
         }
@@ -91,7 +91,7 @@
         }
 
         .chat-input button {
-            background-color: #343a40;
+            background-color: #007bff; /* Primary color for button */
             color: #ffffff;
             border: none;
             padding: 10px 20px;
@@ -103,7 +103,7 @@
         }
 
         .chat-input button:hover {
-            background-color: #495057;
+            background-color: #0056b3; /* Darker shade on hover */
         }
 
         @media (max-width: 768px) {
@@ -120,7 +120,7 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <img src="https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/21502417/db6d3034-b391-4b6a-95f2-8c208786b220/logo.png" alt="EmoSculpt Logo">
+            <img src="https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/21502417/db6d3034-b391-4b6a-95f2-8c208786b220/logo.png" alt="EmoSculpt Logo"> <!-- Logo URL -->
             <h1>EmoSculpt - Your AI-powered emotional gym</h1>
         </div>
         <div class="chat-window" id="chat-window">
@@ -144,7 +144,7 @@
                 // Clear the input field
                 inputField.value = '';
 
-                // Here you would send the message to your server or AI model
+                // Send the message to the server
                 fetch('/chat', {
                     method: 'POST',
                     headers: {
@@ -189,11 +189,9 @@
 
         // Display the welcome message when the page loads
         window.onload = function() {
-            const welcomeMessage = `Welcome to EmoSculpt, your AI-powered emotional gym! I'm here to help you build emotional strength and resilience.
+            const welcomeMessage = `Hello! I'm EmoSculpt, your personal trainer for emotional strength. I'm based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
 
-Just like physical fitness, your emotional well-being depends on building up your inner strengths. EmoSculpt is based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
-
-Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
+Just like physical fitness, your emotional well-being depends on building up your inner strengths. Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
 
 1. Resilience: How quickly you bounce back from setbacks.
 2. Outlook: Your tendency towards optimism or pessimism.
