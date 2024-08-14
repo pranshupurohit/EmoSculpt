@@ -22,7 +22,9 @@ async function runChat(userInput) {
     maxOutputTokens: 1000,
   };
 
-const model = genAI.getGenerativeModel({ model: MODEL_NAME});
+const model = genAI.getGenerativeModel({ model: MODEL_NAME,
+  systemInstruction: "Your name is Narendra Sharma, You're a therapist. Introduce yourself to the user and ask their name.",
+});
   
   const safetySettings = [
     {
@@ -78,4 +80,4 @@ app.post('/chat', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
-})
+});
