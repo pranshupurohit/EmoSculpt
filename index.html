@@ -26,11 +26,10 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            position: relative; /* Ensure the container is positioned relative */
         }
 
         .chat-header {
-            background-color: #333333; /* Dark gray */
+            background-color: rgb(213, 210, 205); /* Changed to the specified color */
             color: #ffffff;
             padding: 20px;
             text-align: center;
@@ -50,20 +49,11 @@
         .chat-header h1 {
             margin: 0;
             font-size: 24px;
-            background-color: rgb(213, 210, 205); /* Off-white background */
-            padding: 10px 20px; /* Padding for bubble effect */
-            border-radius: 20px; /* Rounded corners for bubble effect */
-            display: inline-block; /* Display the text inline */
-            height: 60px; /* Set the height to match the top bar */
-            line-height: 60px; /* Center the text vertically */
+            color: rgb(138, 40, 39); /* Changed to the specified color for 'Emo' */
         }
 
-        .chat-header h1 span:first-child {
-            color: rgb(138, 40, 39); /* Red color for "Emo" */
-        }
-
-        .chat-header h1 span:last-child {
-            color: rgb(3, 10, 3); /* Black color for "Sculpt" */
+        .chat-header h1 span {
+            color: rgb(3, 10, 3); /* Changed to the specified color for 'Sculpt' */
         }
 
         .chat-window {
@@ -79,7 +69,7 @@
             padding: 10px;
             border-radius: 20px; /* Rounded corners for chat bubbles */
             max-width: fit-content; /* Only as wide as the text */
-            display: inline-block; /* Message width only as wide as the text */
+            display: block; /* Display messages in separate lines */
         }
 
         .bot-message {
@@ -89,7 +79,7 @@
         }
 
         .user-message {
-            background-color: #d5d5d5; /* Whitish gray for user messages */
+            background-color: #e0e0e0; /* Whitish gray for user messages */
             color: #000000; /* Black text for user messages */
             align-self: flex-end; /* Align user messages to the right */
             margin-left: auto; /* Push user messages to the right */
@@ -144,8 +134,8 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <img src="https://ibb.co/1mMVthy" alt="EmoSculpt Logo"> <!-- Updated logo URL -->
-            <h1><span>Emo</span><span>Sculpt</span></h1>
+            <img src="https://i.ibb.co/vjh56gy/Untitled-design-removebg-preview.png" alt="EmoSculpt Logo"> <!-- New logo URL -->
+            <h1><span>Emo</span>Sculpt</h1>
         </div>
         <div class="chat-window" id="chat-window">
             <!-- Chat messages will be dynamically added here -->
@@ -208,7 +198,7 @@
             }
 
             chatWindow.appendChild(messageElement);
-            chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom of the chat window
         }
 
         // Display the welcome message when the page loads
