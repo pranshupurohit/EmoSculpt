@@ -22,7 +22,16 @@ async function runChat(userInput) {
     maxOutputTokens: 1000,
   };
 
-  const model = genAI.getGenerativeModel({ model: MODEL_NAME});
+  // Ensure you are using the correct model and version
+  const model = genAI.getGenerativeModel({ 
+    model: MODEL_NAME, // Ensure this model is part of the v1beta version
+    systemMessages: [
+      new SystemMessage({
+        role: "system",
+        content: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."
+      })
+    ]
+  });
   
   const safetySettings = [
     {
