@@ -13,6 +13,12 @@ async function fetchRequest(url, options) {
 
 app.use(express.json());
 
+// Basic GET route
+app.get('/', (req, res) => {
+  res.send('Welcome to the EmoSculpt chatbot server!');
+});
+
+// POST route for /chat
 app.post('/chat', async (req, res) => {
   const userInput = req.body.userInput;
 
