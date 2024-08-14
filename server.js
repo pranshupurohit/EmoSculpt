@@ -4,7 +4,6 @@
 const express = require('express');
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const dotenv = require('dotenv').config();
-const systemInstructions = require('./SystemInstructions.json').instructions; // Load system instructions from JSON file
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,14 +18,11 @@ async function runChat(userInput) {
   const generationConfig = {
     temperature: 0,
     topK: 64,
-    topP: 0.95,
+    topP: .95,
     maxOutputTokens: 1000,
   };
 
-  const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME,
-    systemInstructions: systemInstructions // Pass system instructions directly to the model
-  });
+const model = genAI.getGenerativeModel({ model: MODEL_NAME});
   
   const safetySettings = [
     {
@@ -39,7 +35,9 @@ async function runChat(userInput) {
   const chat = model.startChat({
     generationConfig,
     safetySettings,
-    history: [], // Keep history empty if you don't want to include previous messages
+    history: [
+      
+    ],
   });
 
   // Send the user's input (if any) to the chat
@@ -80,4 +78,4 @@ app.post('/chat', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
-});
+})
