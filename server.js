@@ -1,40 +1,85 @@
 const express = require('express');
-const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config();
+const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
+const dotenv = require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(express.json());
 
-// Serve the HTML file on the root path
+const MODEL_NAME = "gemini-1.5-pro-latest"; // Replace with your actual model name
+const API_KEY = process.env.API_KEY; // Ensure this is set in your .env file
+
+async function runChat(userInput) {
+  try {
+    console.log('Running chat with input:', userInput);
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    const generationConfig = {
+      temperature: 0,
+      topK: 64,
+      topP: 0.95,
+      maxOutputTokens: 1000,
+    };
+
+    const model = genAI.getGenerativeModel({ 
+      model: MODEL_NAME
+    });
+
+    const safetySettings = [
+      {
+        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+      },
+      // Additional safety settings can be added here
+    ];
+
+    const chat = model.startChat({
+      generationConfig,
+      safetySettings,
+      history: [], // Keep history empty if you don't want to include previous messages
+    });
+
+    // Send the user's input (if any) to the chat
+    const result = await chat.sendMessage(userInput);
+    const response = result.response;
+
+    console.log('Chat result:', result);
+    console.log('Response:', response);
+
+    if (response && response.text) {
+      return response.text(); // Ensure this returns the correct text
+    } else {
+      throw new Error('Invalid response structure from AI model');
+    }
+  } catch (error) {
+    console.error('Error in runChat:', error);
+    throw error; // Re-throw the error for the outer catch block to handle
+  }
+}
+
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(__dirname + '/index.html');
 });
 
-app.use(express.json());
+app.get('/loader.gif', (req, res) => {
+  res.sendFile(__dirname + '/loader.gif');
+});
 
 app.post('/chat', async (req, res) => {
   try {
-    const systemInstructions = JSON.parse(fs.readFileSync('systeminstructions.json', 'utf8'));
-    const userInput = req.body.userInput;
+    const userInput = req.body?.userInput;
+    console.log('Incoming /chat req:', userInput);
 
-    const conversation = `${systemInstructions.systemMessage}\nUser: ${userInput}`;
+    if (!userInput) {
+      return res.status(400).json({ error: 'Invalid request body' });
+    }
 
-    const response = await fetch('https://api.yourservice.com/v1/chat', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ conversation })
-    });
-
-    const data = await response.json();
-    res.json({ response: data.reply });
+    const response = await runChat(userInput);
+    res.json({ response });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).send('Something went wrong');
+    console.error('Error in chat endpoint:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
