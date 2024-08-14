@@ -65,7 +65,7 @@
             padding: 10px;
             border-radius: 20px; /* Rounded corners for chat bubbles */
             max-width: fit-content; /* Only as wide as the text */
-            display: inline-block; /* Message width only as wide as the text */
+            display: block; /* Display messages in separate lines */
         }
 
         .bot-message {
@@ -194,7 +194,7 @@
             }
 
             chatWindow.appendChild(messageElement);
-            chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom of the chat window
         }
 
         // Display the welcome message when the page loads
