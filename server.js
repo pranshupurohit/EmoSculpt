@@ -23,13 +23,7 @@ async function runChat(userInput) {
   };
 
   const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME,
-    systemMessages: [
-      new SystemMessage({
-        role: "system",
-        content: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."
-      })
-    ]
+    model: MODEL_NAME
   });
   
   const safetySettings = [
