@@ -1,12 +1,12 @@
+// Ensure Node.js version is >= 18
+// Install dependencies: npm install @google/generative-ai express dotenv
+
 const express = require('express');
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const dotenv = require('dotenv').config();
 
-// Initialize Express application
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Middleware to parse JSON bodies
 app.use(express.json());
 
 const MODEL_NAME = "gemini-1.5-pro-latest"; // Using Gemini 1.5 Pro Latest
@@ -22,32 +22,45 @@ async function runChat(userInput) {
     maxOutputTokens: 1000,
   };
 
-  const chat = genAI.startChat({
+  const model = genAI.getGenerativeModel({ 
     model: MODEL_NAME,
-    systemInstructions: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name.",
+    // Skipping systemInstructions as per your request
+  });
+
+  const safetySettings = [
+    {
+      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    },
+  ];
+
+  const chat = model.startChat({
     generationConfig,
-    safetySettings: [
-      {
-        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-        threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
-      },
-    ],
-    history: [],
+    safetySettings,
+    history: [], // Keep history empty if you don't want to include previous messages
   });
 
   const result = await chat.sendMessage(userInput);
-  return result.response;
+  const response = result.response;
+
+  if (response && response.text) {
+    return response.text; // Return the response text
+  } else {
+    throw new Error('Invalid response structure from AI model');
+  }
 }
 
-// Define routes
+// Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+// Serve the loader gif
 app.get('/loader.gif', (req, res) => {
   res.sendFile(__dirname + '/loader.gif');
 });
 
+// Handle chat requests
 app.post('/chat', async (req, res) => {
   try {
     const userInput = req.body?.userInput;
