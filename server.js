@@ -38,7 +38,7 @@ async function runChat(userInput) {
   // Define the history with system instructions
   const history = [
    {
-        role: "user",
+        role: "system",
         parts: [
           {text: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."},
         ]
