@@ -2,7 +2,7 @@
 // Install dependencies: npm install @google/generative-ai express dotenv
 
 const express = require('express');
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold, SystemMessage } = require('@google/generative-ai');
+const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const dotenv = require('dotenv').config();
 
 const app = express();
@@ -22,15 +22,9 @@ async function runChat(userInput) {
     maxOutputTokens: 1000,
   };
 
-  // Ensure you are using the correct model and version
   const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME, // Ensure this model is part of the v1beta version
-    systemMessages: [
-      new SystemMessage({
-        role: "system",
-        content: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."
-      })
-    ]
+    model: MODEL_NAME,
+    systemInstructions: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name." // Directly passing system instructions
   });
   
   const safetySettings = [
