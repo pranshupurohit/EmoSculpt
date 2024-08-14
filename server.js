@@ -1,49 +1,48 @@
-// Import required modules
-import fetch from 'node-fetch';
-import fs from 'fs';
+const express = require('express');
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const fetch = require('node-fetch');
 
-// Read the system instructions from the JSON file
-const systemInstructionsPath = './systeminstructions.json';
-let systemInstructions = '';
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-try {
-    const rawData = fs.readFileSync(systemInstructionsPath, 'utf8');
-    const jsonData = JSON.parse(rawData);
-    systemInstructions = jsonData.systemInstructions || ''; // Adjust the key if necessary
-} catch (error) {
-    console.error('Error reading or parsing system instructions file:', error);
-    process.exit(1); // Exit if there's an issue with the file
-}
+app.use(bodyParser.json());
 
-// Define the function to send the chat request
-async function sendChatRequest(userInput) {
-    const apiUrl = 'http://localhost:3000/chat'; // URL of your local server
-
-    const requestPayload = {
-        systemInstructions, // Include system instructions in the payload
-        userInput
-    };
-
+app.post('/chat', async (req, res) => {
     try {
-        const response = await fetch(apiUrl, {
+        const userInput = req.body.userInput;
+
+        // Load system instructions from the JSON file
+        const systemInstructions = JSON.parse(fs.readFileSync('systeminstructions.json', 'utf8'));
+        const systemMessage = systemInstructions.message;
+
+        // Construct conversation with system instructions and user input
+        const conversation = `${systemMessage}\nUser: ${userInput}`;
+
+        // Send the request to the Gemini model
+        const response = await fetch('https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-pro:generateMessage', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.API_KEY}`,
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(requestPayload)
+            body: JSON.stringify({
+                prompt: {
+                    text: conversation
+                }
+            })
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
         const data = await response.json();
-        console.log('Response:', data.response);
-    } catch (error) {
-        console.error('Error during request:', error);
-    }
-}
 
-// Example usage
-const userInput = 'Hi!'; // Example user input
-sendChatRequest(userInput);
+        // Send the AI's response back to the client
+        res.json({ response: data.candidates[0].output });
+    } catch (error) {
+        console.error('Error during chat:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+});
