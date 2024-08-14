@@ -23,14 +23,15 @@ async function runChat(userInput) {
   };
 
   const model = genAI.getGenerativeModel({ 
-    model: MODEL_NAME});
-  
+    model: MODEL_NAME,
+    // Skipping systemInstructions as per your request
+  });
+
   const safetySettings = [
     {
       category: HarmCategory.HARM_CATEGORY_HARASSMENT,
       threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
     },
-    // Additional safety settings can be added here
   ];
 
   const chat = model.startChat({
@@ -39,25 +40,27 @@ async function runChat(userInput) {
     history: [], // Keep history empty if you don't want to include previous messages
   });
 
-  // Send the user's input (if any) to the chat
   const result = await chat.sendMessage(userInput);
   const response = result.response;
 
   if (response && response.text) {
-    return response.text(); // Ensure this returns the correct text
+    return response.text; // Return the response text
   } else {
     throw new Error('Invalid response structure from AI model');
   }
 }
 
+// Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+// Serve the loader gif
 app.get('/loader.gif', (req, res) => {
   res.sendFile(__dirname + '/loader.gif');
 });
 
+// Handle chat requests
 app.post('/chat', async (req, res) => {
   try {
     const userInput = req.body?.userInput;
@@ -75,6 +78,7 @@ app.post('/chat', async (req, res) => {
   }
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(Server listening on port ${port});
-})
+  console.log(`Server listening on port ${port}`);
+});
