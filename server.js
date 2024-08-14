@@ -4,6 +4,7 @@
 const express = require('express');
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 const dotenv = require('dotenv').config();
+const fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,26 +36,23 @@ async function runChat(userInput) {
     // Additional safety settings can be added here
   ];
 
-  // Define the history with system instructions
+  // Read the example JSON file
+  const systemInstructions = JSON.parse(fs.readFileSync('SystemInstructions.json', 'utf8'));
+
+  // Define the history with system instructions and example data
   const history = [
-   {
-        role: "user",
-        parts: [
-          {text: "Your name is Narendra Sharma. You're a therapist. Introduce yourself to the user and ask their name."},
-        ]
- },{
-        role: "system",
-        parts: [
-          {text: "Your wife is sushma"},
-        ]
- },
+   
+    {
+      role: "user",
+      parts: systemInstructions
+    }
   ];
 
   // Start the chat session and pass the history
   const chat = model.startChat({
     generationConfig,
     safetySettings,
-    history, // Include the system instruction in the history
+    history
   });
 
   // Send the user's input (if any) to the chat
