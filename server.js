@@ -8,13 +8,14 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
-// Load instructions from JSON file
+// Load system instructions from JSON file
 const instructionsPath = path.join(__dirname, 'systeminstructions.json');
 let instructions = {};
 try {
   instructions = JSON.parse(fs.readFileSync(instructionsPath, 'utf8'));
-} catch (error) {
-  console.error('Error loading instructions from JSON:', error);
+  console.log('Loaded instructions:', instructions);
+} catch (err) {
+  console.error('Error loading instructions:', err);
 }
 
 const MODEL_NAME = "gemini-1.5-pro-latest"; // Replace with your actual model name
@@ -36,14 +37,16 @@ async function runChat(userInput) {
       model: MODEL_NAME
     });
 
-    // Apply safety settings from JSON file
-    const safetySettings = instructions.safetySettings || [
+    const safetySettings = [
       {
         category: HarmCategory.HARM_CATEGORY_HARASSMENT,
         threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
       },
       // Additional safety settings can be added here
     ];
+
+    console.log('Generation Config:', generationConfig);
+    console.log('Safety Settings:', safetySettings);
 
     const chat = model.startChat({
       generationConfig,
@@ -90,7 +93,7 @@ app.post('/chat', async (req, res) => {
     res.json({ response });
   } catch (error) {
     console.error('Error in chat endpoint:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
 
