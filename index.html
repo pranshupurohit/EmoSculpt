@@ -1,182 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EmoSculpt - Emotional Fitness Trainer</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f0f0f0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmoSculpt - Emotional Fitness Trainer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #e9ecef;
+        }
 
-    .chat-container {
-      width: 80%;
-      max-width: 800px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .chat-header {
-      background-color: #000; /* Changed to black */
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
+        .chat-header {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
 
-    .chat-header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+        .chat-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
 
-    .chat-window {
-      height: 400px;
-      overflow-y: auto;
-      padding: 20px;
-    }
+        .chat-window {
+            flex: 1;
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
 
-    .message {
-      margin-bottom: 10px;
-    }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%;
+        }
 
-    .bot-message {
-      background-color: #f0f0f0;
-      padding: 10px;
-      border-radius: 5px;
-    }
+        .bot-message {
+            background-color: #e9ecef;
+            align-self: flex-start;
+        }
 
-    .user-message {
-      text-align: right;
-    }
+        .user-message {
+            background-color: #343a40;
+            color: #ffffff;
+            align-self: flex-end;
+        }
 
-    .user-message .message-content {
-      background-color: #000; /* Changed to black */
-      color: #fff;
-      display: inline-block;
-      padding: 10px;
-      border-radius: 5px;
-    }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #dee2e6;
+            background-color: #ffffff;
+        }
 
-    .chat-input {
-      display: flex;
-      padding: 10px;
-      border-top: 1px solid #f0f0f0;
-    }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+        }
 
-    .chat-input input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
+        .chat-input button {
+            background-color: #343a40;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
 
-    .chat-input button {
-      background-color: #000; /* Changed to black */
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+        .chat-input button:hover {
+            background-color: #495057;
+        }
 
-    @media (max-width: 768px) {
-      .chat-container {
-        width: 90%;
-      }
+        @media (max-width: 768px) {
+            .chat-container {
+                width: 95%;
+            }
 
-      .chat-window {
-        height: 300px;
-      }
-    }
-  </style>
+            .chat-window {
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <h1>EmoSculpt - Emotional Fitness Trainer</h1>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>EmoSculpt - Emotional Fitness Trainer</h1>
+        </div>
+        <div class="chat-window" id="chat-window">
+            <!-- Chat messages will be dynamically added here -->
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type your message..." id="chat-input" onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
     </div>
-    <div class="chat-window" id="chat-window">
-      <!-- Chat messages will be dynamically added here -->
-    </div>
-    <div class="chat-input">
-      <input type="text" placeholder="Type your message..." id="chat-input" onkeypress="handleKeyPress(event)">
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
 
-  <script>
-    // Function to send a message
-    function sendMessage() {
-      const inputField = document.getElementById('chat-input');
-      const userMessage = inputField.value.trim();
+    <script>
+        function sendMessage() {
+            const inputField = document.getElementById('chat-input');
+            const userMessage = inputField.value.trim();
 
-      if (userMessage) {
-        // Display the user's message in the chat window
-        displayMessage('user', userMessage);
-        
-        // Clear the input field
-        inputField.value = '';
+            if (userMessage) {
+                // Display the user's message in the chat window
+                displayMessage('user', userMessage);
+                
+                // Clear the input field
+                inputField.value = '';
 
-        // Here you would send the message to your server or AI model
-        // For example:
-        // fetch('/chat', { method: 'POST', body: JSON.stringify({ userInput: userMessage }) })
-        //   .then(response => response.json())
-        //   .then(data => displayMessage('bot', data.response));
-      }
-    }
+                // Here you would send the message to your server or AI model
+                // For example:
+                // fetch('/chat', { method: 'POST', body: JSON.stringify({ userInput: userMessage }) })
+                //   .then(response => response.json())
+                //   .then(data => displayMessage('bot', data.response));
+            }
+        }
 
-    // Function to handle Enter key press
-    function handleKeyPress(event) {
-      if (event.key === 'Enter') {
-        sendMessage();
-      }
-    }
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
 
-    // Function to display messages in the chat window
-    function displayMessage(role, message) {
-      const chatWindow = document.getElementById('chat-window');
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('message');
+        function displayMessage(role, message) {
+            const chatWindow = document.getElementById('chat-window');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
 
-      if (role === 'user') {
-        messageElement.classList.add('user-message');
-        messageElement.innerHTML = `<div class="message-content">${message}</div>`;
-      } else {
-        messageElement.classList.add('bot-message');
-        messageElement.textContent = message;
-      }
+            if (role === 'user') {
+                messageElement.classList.add('user-message');
+                messageElement.textContent = message;
+            } else {
+                messageElement.classList.add('bot-message');
+                messageElement.textContent = message;
+            }
 
-      chatWindow.appendChild(messageElement);
-      chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
-    }
+            chatWindow.appendChild(messageElement);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Scroll to the bottom
+        }
 
-    // Display the welcome message when the page loads
-    window.onload = function() {
-      const welcomeMessage = `Hello! I'm EmoSculpt, your personal trainer for emotional strength. I'm based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
-      
-      Just like physical fitness, your emotional well-being depends on building up your inner strengths. Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
-      
-      Resilience: How quickly you bounce back from setbacks.
-      Outlook: Your tendency towards optimism or pessimism.
-      Social Intuition: Your ability to read social cues.
-      Self-Awareness: How well you understand your own emotions.
-      Sensitivity to Context: How well you adapt your emotions to different situations.
-      Attention: Your ability to focus and concentrate.
-      
-      These dimensions influence how we respond to stress, connect with others, and experience the world.`;
-      
-      displayMessage('bot', welcomeMessage);
-    };
-  </script>
+        // Display the welcome message when the page loads
+        window.onload = function() {
+            const welcomeMessage = `Hello! I'm EmoSculpt, your personal trainer for emotional strength. I'm based on the groundbreaking research of neuroscientist Richard J. Davidson, as detailed in his book The Emotional Life of Your Brain.
+
+Just like physical fitness, your emotional well-being depends on building up your inner strengths. Davidson's work reveals that we all have our own unique emotional styles, which describes how we deal with our emotions. It is shaped by six key dimensions:
+
+Resilience: How quickly you bounce back from setbacks.
+Outlook: Your tendency towards optimism or pessimism.
+Social Intuition: Your ability to read social cues.
+Self-Awareness: How well you understand your own emotions.
+Sensitivity to Context: How well you adapt your emotions to different situations.
+Attention: Your ability to focus and concentrate.
+
+These dimensions influence how we respond to stress, connect with others, and experience the world.`;
+            
+            displayMessage('bot', welcomeMessage);
+        };
+    </script>
 </body>
 </html>
