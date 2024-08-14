@@ -1,48 +1,52 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const fetch = require('node-fetch');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+// Use dynamic import for node-fetch
+async function fetchRequest(url, options) {
+  const fetch = await import('node-fetch').then(mod => mod.default);
+  return fetch(url, options);
+}
+
+app.use(express.json());
 
 app.post('/chat', async (req, res) => {
-    try {
-        const userInput = req.body.userInput;
+  const userInput = req.body.userInput;
 
-        // Load system instructions from the JSON file
-        const systemInstructions = JSON.parse(fs.readFileSync('systeminstructions.json', 'utf8'));
-        const systemMessage = systemInstructions.message;
+  // Load system instructions from JSON file
+  const fs = require('fs');
+  const systemInstructions = JSON.parse(fs.readFileSync('systeminstructions.json', 'utf8'));
+  const systemMessage = systemInstructions.systemMessage;
+  const conversation = `${systemMessage}\nUser: ${userInput}`;
 
-        // Construct conversation with system instructions and user input
-        const conversation = `${systemMessage}\nUser: ${userInput}`;
+  const modelOptions = {
+    model: 'YOUR_MODEL_ID', // Replace with your model ID
+    messages: [{ role: 'system', content: conversation }],
+    max_tokens: 100
+  };
 
-        // Send the request to the Gemini model
-        const response = await fetch('https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.5-pro:generateMessage', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${process.env.API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                prompt: {
-                    text: conversation
-                }
-            })
-        });
+  try {
+    const response = await fetchRequest('https://api.generativelanguage.googleapis.com/v1beta2/models/YOUR_MODEL_ID:generateMessage', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.GOOGLE_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(modelOptions)
+    });
 
-        const data = await response.json();
-
-        // Send the AI's response back to the client
-        res.json({ response: data.candidates[0].output });
-    } catch (error) {
-        console.error('Error during chat:', error);
-        res.status(500).send('Internal Server Error');
-    }
+    const data = await response.json();
+    const botMessage = data.choices[0].message.content;
+    res.json({ response: botMessage });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
