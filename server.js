@@ -39,8 +39,8 @@ async function runChat(userInput) {
   const chat = model.startChat({
     generationConfig,
     safetySettings,
-   history: [
-  {
+   history:[
+     {
     role: "user",
     parts: [{ text: "Initiate EmoSculpt system." }],
   },
@@ -669,7 +669,7 @@ D.  Distracted. 😅
     role: "user",
     parts: [{ text: "Begin user interaction. Greet the user and initiate the session." }],
   },
-],
+]
   });
 
   // Send the user's input (if any) to the chat
