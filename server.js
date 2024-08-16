@@ -6,8 +6,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
-const MODEL_NAME = "gemini-1.5-pro-latest"; 
-const API_KEY = process.env.API_KEY; 
+const MODEL_NAME = "gemini-1.5-pro-latest";
+const API_KEY = process.env.API_KEY;
 
 const chatHistory = {}; 
 
@@ -68,7 +68,7 @@ async function runChat(userInput, sessionId) {
       throw new Error('Invalid response structure from AI model');
     }
   } catch (error) {
-    console.error('Error sending message:', error);
+    console.error('Error sending message:', error.message); 
     throw error;
   }
 }
@@ -95,8 +95,8 @@ app.post('/chat', async (req, res) => {
     console.log(`Response: ${response}`);
     res.json({ response });
   } catch (error) {
-    console.error('Error in chat endpoint:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error in chat endpoint:', error.message);
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 });
 
