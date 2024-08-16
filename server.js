@@ -142,4 +142,27 @@ app.get('/', (req, res) => {
 });
 
 app.get('/loader.gif', (req, res) => {
-  res.sendFile(_
+  res.sendFile(__dirname + '/loader.gif');
+});
+
+// Chat endpoint with session management
+app.post('/chat', async (req, res) => {
+  try {
+    const userInput = req.body?.userInput;
+    const sessionId = req.body?.sessionId || 'default'; // You can use a unique session ID per user
+
+    if (!userInput) {
+      return res.status(400).json({ error: 'User input is required' });
+    }
+
+    const response = await runChat(userInput, sessionId);
+    res.json({ response });
+  } catch (error) {
+    console.error('Error in chat endpoint:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
