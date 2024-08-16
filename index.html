@@ -26,22 +26,30 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            position: fixed; /* Keep the container fixed */
+            position: relative; /* Ensure the container is positioned relative */
         }
 
         .chat-header {
             background-color: #333333; /* Dark gray */
             color: #ffffff;
+            padding: 20px;
+            text-align: center;
             display: flex;
-            align-items: center; /* Center items vertically */
-            justify-content: center; /* Center items horizontally */
-            height: 60px; /* Set a fixed height for the header */
-            padding: 0 10px; /* Add horizontal padding */
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0; /* Fixed position */
+            z-index: 10; /* Ensure it stays above other elements */
         }
 
         .chat-header img {
-            max-height: 100%; /* Ensure logo fits within header height */
-            height: 100%; /* Make logo fill the header height */
+            height: 60px; /* Logo height to match top bar */
+            margin-right: 10px;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 24px;
         }
 
         .chat-window {
@@ -50,28 +58,20 @@
             padding: 20px;
             background-color: #2a2a2a; /* Darker gray for chat window */
             color: #ffffff; /* White text for messages */
-            border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
-            display: flex;
-            flex-direction: column; /* Stack messages vertically */
-            word-wrap: break-word; /* Allow long words to wrap */
         }
 
         .message {
-            margin-bottom: 15px; /* Space between messages */
-            padding: 15px; /* Increased padding for better readability */
+            margin-bottom: 10px;
+            padding: 10px;
             border-radius: 20px; /* Rounded corners for chat bubbles */
-            max-width: 75%; /* Limit width of messages */
-            display: inline-block; /* Allow messages to wrap */
-            transition: opacity 0.3s ease; /* Smooth transition for messages */
-            line-height: 1.5; /* Increased line height for better readability */
-            white-space: pre-wrap; /* Preserve whitespace and wrap lines */
+            max-width: fit-content; /* Only as wide as the text */
+            display: block; /* Display messages in separate lines */
         }
 
         .bot-message {
             background-color: #444444; /* Slightly lighter gray for bot messages */
             align-self: flex-start; /* Align bot messages to the left */
             margin-right: auto; /* Push bot messages to the left */
-            text-align: left; /* Align text to the left */
         }
 
         .user-message {
@@ -79,7 +79,6 @@
             color: #000000; /* Black text for user messages */
             align-self: flex-end; /* Align user messages to the right */
             margin-left: auto; /* Push user messages to the right */
-            text-align: right; /* Align text to the right */
         }
 
         .chat-input {
@@ -87,22 +86,18 @@
             padding: 10px;
             border-top: 1px solid #444; /* Dark border */
             background-color: #333333; /* Match container color */
+            position: sticky;
+            bottom: 0; /* Fixed position */
         }
 
-        .chat-input textarea {
+        .chat-input input {
             flex: 1;
-            padding: 10px; /* Padding for input field */
+            padding: 10px;
             border: 1px solid #444; /* Dark border */
             border-radius: 5px;
             font-size: 16px;
             background-color: #555; /* Dark input field */
             color: #ffffff; /* White text in input */
-            margin-right: 10px; /* Space between input and button */
-            line-height: 1.5; /* Increased line height for better readability */
-            resize: none; /* Prevent resizing */
-            overflow-y: auto; /* Allow vertical scrolling */
-            min-height: 40px; /* Minimum height for the textarea (1 line) */
-            height: 40px; /* Set initial height for the textarea (1 line) */
         }
 
         .chat-input button {
@@ -113,6 +108,7 @@
             border-radius: 5px;
             font-size: 16px;
             cursor: pointer;
+            margin-left: 10px;
             transition: background-color 0.3s;
         }
 
@@ -124,20 +120,25 @@
             .chat-container {
                 width: 95%;
             }
+
+            .chat-window {
+                height: 300px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <img src="logo.png" alt="EmoSculpt Logo">
+            <img src="https://i.ibb.co/L6PTKgm/Emo-Sculpt.jpg" alt="EmoSculpt Logo"> <!-- Logo URL -->
+            <h1>EmoSculpt - Your AI-powered emotional gym</h1>
         </div>
         <div class="chat-window" id="chat-window">
             <!-- Chat messages will be dynamically added here -->
         </div>
         <div class="chat-input">
-            <textarea placeholder="Type your message..." id="chat-input" oninput="autoResize(this)" onkeypress="handleKeyPress(event)" aria-label="Chat input"></textarea>
-            <button onclick="sendMessage()" aria-label="Send message">Send</button>
+            <input type="text" placeholder="Type your message..." id="chat-input" onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
@@ -152,9 +153,6 @@
                 
                 // Clear the input field
                 inputField.value = '';
-
-                // Reset the height of the textarea to one line height
-                inputField.style.height = '40px'; // Reset to one line height
 
                 // Send the message to the server
                 fetch('/chat', {
@@ -172,21 +170,14 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    displayMessage('bot', 'Sorry, there was an error sending your message. Please try again.');
                 });
             }
         }
 
         function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault(); // Prevent form submission
+            if (event.key === 'Enter') {
                 sendMessage();
             }
-        }
-
-        function autoResize(textarea) {
-            textarea.style.height = 'auto'; // Reset height to auto to calculate new height
-            textarea.style.height = Math.min(textarea.scrollHeight, 140) + 'px'; // Set height to scroll height, capped at 140px (3-4 lines)
         }
 
         function displayMessage(role, message) {
@@ -207,7 +198,6 @@
         }
 
         
-        };
     </script>
 </body>
 </html>
